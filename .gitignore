@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# material bruto da campanha (PDF e fotos originais)
+/recursos/
+
+# ferramentas locais de agente
+/.serena/

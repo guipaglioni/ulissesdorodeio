@@ -1,26 +1,42 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/*
+ * Paleta extraída do documento-base da campanha
+ * (Ulisses_do_Rodeio_Biografia_Trajetoria_Bandeiras.pdf):
+ * azul #0B2D75 / #08265D, laranja #F36C21, tints #FFF2EA / #FFD4BF,
+ * neutros #F5F7FB, #2C3340, #5F6673.
+ */
+@theme {
+  --color-brand-blue: #0b2d75;
+  --color-brand-blue-dark: #08265d;
+  --color-brand-orange: #f36c21;
+  --color-brand-peach: #fff2ea;
+  --color-brand-peach-strong: #ffd4bf;
+  --color-brand-mist: #f5f7fb;
+  --color-brand-ink: #2c3340;
+  --color-brand-muted: #5f6673;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-source-serif), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-white);
+  color: var(--color-brand-ink);
+}
+
+/* Compensa o header fixo ao navegar pelas âncoras do menu. */
+[id] {
+  scroll-margin-top: 7rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
