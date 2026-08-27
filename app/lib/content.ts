@@ -36,6 +36,8 @@ export const navegacao = [
   { href: "#trajetoria", rotulo: "Trajetória" },
   { href: "#bandeiras", rotulo: "Bandeiras" },
   { href: "#parceria", rotulo: "Parceria" },
+  { href: "#na-midia", rotulo: "Na Mídia" },
+  { href: "#videos", rotulo: "Vídeos" },
   { href: "#por-que", rotulo: "Por que Ulisses" },
 ] as const;
 
@@ -85,6 +87,9 @@ export const trajetoria = {
   blocos: [
     {
       titulo: "Uma história que começou no interior",
+      imagem: "/trajetoria-interior.jpg",
+      imagemAlt:
+        "Ulisses do Rodeio ao lado do pai, Saru, em evento do interior paulista",
       paragrafos: [
         "Antes da política, veio o trabalho.",
         "Ulisses cresceu em Marília e construiu sua vida profissional ligado aos eventos que movimentam cidades inteiras do interior paulista.",
@@ -95,6 +100,8 @@ export const trajetoria = {
     },
     {
       titulo: "Eventos que movimentam cidades",
+      imagem: "/trajetoria-eventos.jpg",
+      imagemAlt: "Ulisses do Rodeio em palco durante festa de peão",
       paragrafos: [
         "A organização de uma grande festa começa muito antes de o público chegar.",
         "Existe estrutura, logística, fornecedores, trabalhadores, alimentação, segurança, comércio, entretenimento e uma enorme cadeia de pessoas envolvidas.",
@@ -103,6 +110,8 @@ export const trajetoria = {
     },
     {
       titulo: "Do rodeio para Brasília",
+      imagem: "/trajetoria-brasilia.jpg",
+      imagemAlt: "Ulisses do Rodeio com o chapéu nas mãos em arena de rodeio",
       paragrafos: [
         "Ulisses decidiu disputar uma cadeira de deputado federal com um objetivo claro: dar mais voz aos municípios do interior paulista.",
         "Sua candidatura pelo Solidariedade nasce da defesa de uma representação mais próxima das cidades, do agronegócio, dos trabalhadores e de quem produz e empreende longe dos grandes centros.",
@@ -127,6 +136,9 @@ export const cadeiaEconomica = {
 export const citacao = {
   texto:
     "O interior não precisa ser lembrado apenas durante a eleição. Precisa ter presença onde as decisões são tomadas.",
+  imagem: "/trajetoria-citacao.jpg",
+  imagemAlt:
+    "Ulisses do Rodeio discursa ao microfone ao lado de lideranças em evento no interior",
 } as const;
 
 export const bandeiras = {
@@ -195,6 +207,73 @@ export const porQue = {
     "Conhece a economia das cidades do interior.",
   ],
   fecho: "Agora quer transformar essa experiência em representação.",
+} as const;
+
+export const naMidia = {
+  titulo: "Na mídia",
+  subtitulo:
+    "A repercussão da candidatura, do interior paulista aos veículos de alcance nacional.",
+  categorias: [
+    {
+      titulo: "Mídia Regional",
+      descricao:
+        "Notícias e reportagens de veículos do interior paulista e da região de Marília, reforçando a conexão de Ulisses com o interior.",
+      itens: [
+        {
+          veiculo: "Marília Notícia",
+          titulo:
+            "Ulisses e Waldir Filé se unem para garantir o crescimento da região de Marília",
+          url: "https://marilianoticia.com.br/ulisses-e-waldir-file-se-unem-para-garantir-o-crescimento-da-regiao-de-marilia/",
+        },
+      ],
+    },
+    {
+      titulo: "Mídia Nacional / Abrangente",
+      descricao:
+        "Reportagens, entrevistas e conteúdos publicados por veículos de alcance estadual ou nacional, reforçando projeção, autoridade e alcance.",
+      itens: [
+        {
+          veiculo: "O Globo",
+          titulo:
+            "Ulisses do Rodeio: a força do interior no cenário do agronegócio nacional",
+          url: "https://oglobo.globo.com/patrocinado/pulse-brand/noticia/2026/07/21/ulisses-do-rodeio-a-forca-do-interior-no-cenario-do-agronegocio-nacional-1.ghtml",
+        },
+      ],
+    },
+  ],
+} as const;
+
+export const videos = {
+  titulo: "Vídeos",
+  subtitulo:
+    "Bastidores da campanha e da trajetória de Ulisses do Rodeio, direto do Instagram.",
+  itens: [
+    {
+      titulo: "Quem acorda cedo e vai à luta",
+      url: "https://www.instagram.com/p/Dcek4IatTWI/",
+      thumbnail: "/videos/video-1.jpg",
+    },
+    {
+      titulo: "Quem permanece",
+      url: "https://www.instagram.com/p/DcSCG1cNLTj/",
+      thumbnail: "/videos/video-2.jpg",
+    },
+    {
+      titulo: "Parabéns, Saru",
+      url: "https://www.instagram.com/p/DcE_cYCgX7c/",
+      thumbnail: "/videos/video-3.jpg",
+    },
+    {
+      titulo: "Terra Natal",
+      url: "https://www.instagram.com/p/Dbl8avhvItU/",
+      thumbnail: "/videos/video-terra-natal.jpg",
+    },
+    {
+      titulo: "Cultura",
+      url: "https://www.instagram.com/p/DZC_L6OBBS-/",
+      thumbnail: "/videos/video-cultura.jpg",
+    },
+  ],
 } as const;
 
 export const redes = [
