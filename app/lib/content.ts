@@ -15,6 +15,9 @@ export const candidato = {
   partido: "Solidariedade",
   estado: "São Paulo",
   slogan: "Presença no interior. Voz em Brasília.",
+  cnpj: "68.312.635/0001-68",
+  coligacao:
+    "Coligação Federação Renovação Solidária – Solidariedade e PRD – Partido da Renovação Democrática",
   nascimento: {
     data: "11 de maio de 1990",
     cidade: "Marília",

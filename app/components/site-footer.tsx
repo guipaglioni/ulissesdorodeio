@@ -81,14 +81,15 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs leading-6 text-white/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-2 border-t border-white/10 pt-8 text-xs leading-6 text-white/50">
           <p>
             {candidato.nome} · {candidato.cargo} · {candidato.numero} ·{" "}
             {candidato.partido}
           </p>
-          {/* TODO (equipe da campanha): incluir CNPJ da campanha e demais
-              informações exigidas pela legislação eleitoral. */}
-          <p>Material de campanha eleitoral.</p>
+          <p>{candidato.coligacao}</p>
+          <p>
+            CNPJ: {candidato.cnpj} · Material de campanha eleitoral.
+          </p>
         </div>
       </div>
     </footer>
