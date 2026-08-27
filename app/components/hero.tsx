@@ -26,7 +26,7 @@ export function Hero() {
 
       <div className="relative mx-auto grid w-full max-w-6xl gap-16 px-6 py-20 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:py-24">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.16em] text-brand-peach-strong">
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-1.5 text-[0.65rem] font-semibold uppercase tracking-[0.1em] text-brand-peach-strong sm:text-xs sm:tracking-[0.16em]">
             {hero.chapeu}
           </p>
 
@@ -60,11 +60,11 @@ export function Hero() {
 
           <dl className="mt-12 grid max-w-lg grid-cols-3 gap-px overflow-hidden rounded-xl bg-white/15">
             {hero.destaques.map((item) => (
-              <div key={item.rotulo} className="bg-brand-blue px-4 py-4">
+              <div key={item.rotulo} className="min-w-0 bg-brand-blue px-3 py-4 sm:px-4">
                 <dt className="text-[0.65rem] font-medium uppercase tracking-wider text-white/60">
                   {item.rotulo}
                 </dt>
-                <dd className="mt-1 text-sm font-semibold text-white">
+                <dd className="mt-1 break-words text-sm font-semibold text-white">
                   {item.valor}
                 </dd>
               </div>
