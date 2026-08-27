@@ -24,8 +24,10 @@ const MASCARA_SRC = `${BASE}/moldura-7770-mascara.png`;
 const LARANJA = "#F36C21";
 /** Círculo interno da moldura, medido no arquivo da arte. */
 const ABERTURA = { cx: 593.5, cy: 498, raio: 461 };
-const ZOOM_MIN = 1;
+const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 3;
+/** Folga extra de arrasto, fração do lado da abertura, além da área coberta pela foto. */
+const FOLGA_ARRASTO = 0.35;
 
 type Deslocamento = { x: number; y: number };
 
@@ -91,9 +93,10 @@ export function MolduraFoto() {
     if (!foto) return { x: 0, y: 0 };
     const lado = ABERTURA.raio * 2;
     const escala = Math.max(lado / foto.width, lado / foto.height) * zoom;
+    const folga = lado * FOLGA_ARRASTO;
     return {
-      x: Math.max(0, (foto.width * escala - lado) / 2),
-      y: Math.max(0, (foto.height * escala - lado) / 2),
+      x: Math.max(0, (foto.width * escala - lado) / 2) + folga,
+      y: Math.max(0, (foto.height * escala - lado) / 2) + folga,
     };
   }, [zoom]);
 
