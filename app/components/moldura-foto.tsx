@@ -23,7 +23,7 @@ const MASCARA_SRC = `${BASE}/moldura-7770-mascara.png`;
 /** Laranja da campanha, usado onde a arte não cobre e a foto não entra. */
 const LARANJA = "#F36C21";
 /** Círculo interno da moldura, medido no arquivo da arte. */
-const ABERTURA = { cx: 593.5, cy: 498, raio: 461 };
+const ABERTURA = { cx: 548, cy: 498, raio: 431 };
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 3;
 /** Folga extra de arrasto, fração do lado da abertura, além da área coberta pela foto. */
