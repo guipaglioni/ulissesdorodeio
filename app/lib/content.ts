@@ -213,32 +213,18 @@ export const naMidia = {
   titulo: "Na mídia",
   subtitulo:
     "A repercussão da candidatura, do interior paulista aos veículos de alcance nacional.",
-  categorias: [
+  itens: [
     {
-      titulo: "Mídia Regional",
-      descricao:
-        "Notícias e reportagens de veículos do interior paulista e da região de Marília, reforçando a conexão de Ulisses com o interior.",
-      itens: [
-        {
-          veiculo: "Marília Notícia",
-          titulo:
-            "Ulisses e Waldir Filé se unem para garantir o crescimento da região de Marília",
-          url: "https://marilianoticia.com.br/ulisses-e-waldir-file-se-unem-para-garantir-o-crescimento-da-regiao-de-marilia/",
-        },
-      ],
+      veiculo: "Marília Notícia",
+      titulo:
+        "Ulisses e Waldir Filé se unem para garantir o crescimento da região de Marília",
+      url: "https://marilianoticia.com.br/ulisses-e-waldir-file-se-unem-para-garantir-o-crescimento-da-regiao-de-marilia/",
     },
     {
-      titulo: "Mídia Nacional / Abrangente",
-      descricao:
-        "Reportagens, entrevistas e conteúdos publicados por veículos de alcance estadual ou nacional, reforçando projeção, autoridade e alcance.",
-      itens: [
-        {
-          veiculo: "O Globo",
-          titulo:
-            "Ulisses do Rodeio: a força do interior no cenário do agronegócio nacional",
-          url: "https://oglobo.globo.com/patrocinado/pulse-brand/noticia/2026/07/21/ulisses-do-rodeio-a-forca-do-interior-no-cenario-do-agronegocio-nacional-1.ghtml",
-        },
-      ],
+      veiculo: "O Globo",
+      titulo:
+        "Ulisses do Rodeio: a força do interior no cenário do agronegócio nacional",
+      url: "https://oglobo.globo.com/patrocinado/pulse-brand/noticia/2026/07/21/ulisses-do-rodeio-a-forca-do-interior-no-cenario-do-agronegocio-nacional-1.ghtml",
     },
   ],
 } as const;
