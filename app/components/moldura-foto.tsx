@@ -44,6 +44,9 @@ export function MolduraFoto() {
   const recorteRef = useRef<HTMLCanvasElement | null>(null);
   const arrastandoRef = useRef<{ x: number; y: number } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  /** Toques ativos no canvas, por pointerId — usado para detectar pinça. */
+  const toquesRef = useRef<Map<number, { x: number; y: number }>>(new Map());
+  const pincaRef = useRef<{ distancia: number; centroX: number; centroY: number } | null>(null);
 
   const [temFoto, setTemFoto] = useState(false);
   const [zoom, setZoom] = useState(1.1);
@@ -87,18 +90,20 @@ export function MolduraFoto() {
     mascara.onerror = falhar;
   }, []);
 
-  /** Quanto a foto pode deslizar sem deixar buraco na abertura. */
-  const limites = useCallback(() => {
+  /** Quanto a foto pode deslizar sem deixar buraco na abertura, para um dado zoom. */
+  const limitesPara = useCallback((z: number) => {
     const foto = fotoRef.current;
     if (!foto) return { x: 0, y: 0 };
     const lado = ABERTURA.raio * 2;
-    const escala = Math.max(lado / foto.width, lado / foto.height) * zoom;
+    const escala = Math.max(lado / foto.width, lado / foto.height) * z;
     const folga = lado * FOLGA_ARRASTO;
     return {
       x: Math.max(0, (foto.width * escala - lado) / 2) + folga,
       y: Math.max(0, (foto.height * escala - lado) / 2) + folga,
     };
-  }, [zoom]);
+  }, []);
+
+  const limites = useCallback(() => limitesPara(zoom), [limitesPara, zoom]);
 
   const desenhar = useCallback(() => {
     const canvas = canvasRef.current;
@@ -171,13 +176,69 @@ export function MolduraFoto() {
     img.src = url;
   }
 
+  /** Distância e centro entre os dois primeiros toques ativos. */
+  function medirPinca() {
+    const [p1, p2] = [...toquesRef.current.values()];
+    return {
+      distancia: Math.hypot(p2.x - p1.x, p2.y - p1.y),
+      centroX: (p1.x + p2.x) / 2,
+      centroY: (p1.y + p2.y) / 2,
+    };
+  }
+
   function aoPressionar(evento: ReactPointerEvent<HTMLCanvasElement>) {
     if (!temFoto) return;
     evento.currentTarget.setPointerCapture(evento.pointerId);
-    arrastandoRef.current = { x: evento.clientX, y: evento.clientY };
+    toquesRef.current.set(evento.pointerId, { x: evento.clientX, y: evento.clientY });
+
+    if (toquesRef.current.size === 2) {
+      arrastandoRef.current = null;
+      pincaRef.current = medirPinca();
+    } else if (toquesRef.current.size === 1) {
+      arrastandoRef.current = { x: evento.clientX, y: evento.clientY };
+    }
   }
 
   function aoMover(evento: ReactPointerEvent<HTMLCanvasElement>) {
+    if (toquesRef.current.has(evento.pointerId)) {
+      toquesRef.current.set(evento.pointerId, { x: evento.clientX, y: evento.clientY });
+    }
+
+    // Dois dedos na tela: pinça controla zoom, e o deslocamento do centro entre
+    // eles arrasta a foto junto — assim dá para ajustar tudo num só gesto.
+    if (toquesRef.current.size === 2 && pincaRef.current) {
+      const anterior = pincaRef.current;
+      const atual = medirPinca();
+      const caixa = evento.currentTarget.getBoundingClientRect();
+      const proporcao = TAMANHO / caixa.width;
+
+      setZoom((zoomAtual) => {
+        const fator = atual.distancia / anterior.distancia;
+        const novoZoom = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, zoomAtual * fator));
+        const maximo = limitesPara(novoZoom);
+        setDeslocamento((deslocamentoAtual) => ({
+          x: Math.min(
+            maximo.x,
+            Math.max(
+              -maximo.x,
+              deslocamentoAtual.x + (atual.centroX - anterior.centroX) * proporcao,
+            ),
+          ),
+          y: Math.min(
+            maximo.y,
+            Math.max(
+              -maximo.y,
+              deslocamentoAtual.y + (atual.centroY - anterior.centroY) * proporcao,
+            ),
+          ),
+        }));
+        return novoZoom;
+      });
+
+      pincaRef.current = atual;
+      return;
+    }
+
     const inicio = arrastandoRef.current;
     if (!inicio) return;
 
@@ -198,13 +259,23 @@ export function MolduraFoto() {
     arrastandoRef.current = { x: evento.clientX, y: evento.clientY };
   }
 
-  function aoSoltar() {
-    arrastandoRef.current = null;
+  function aoSoltar(evento: ReactPointerEvent<HTMLCanvasElement>) {
+    toquesRef.current.delete(evento.pointerId);
+
+    if (toquesRef.current.size < 2) {
+      pincaRef.current = null;
+    }
+    if (toquesRef.current.size === 1) {
+      const restante = [...toquesRef.current.values()][0];
+      arrastandoRef.current = restante;
+    } else {
+      arrastandoRef.current = null;
+    }
   }
 
   function aoMudarZoom(valor: number) {
     setZoom(valor);
-    const maximo = limites();
+    const maximo = limitesPara(valor);
     setDeslocamento((atual) => ({
       x: Math.min(maximo.x, Math.max(-maximo.x, atual.x)),
       y: Math.min(maximo.y, Math.max(-maximo.y, atual.y)),
@@ -278,9 +349,32 @@ export function MolduraFoto() {
               aria-label="Pré-visualização da sua foto com a moldura da campanha"
             />
             {temFoto && (
-              <p className="mt-3 text-center text-sm text-brand-muted">
-                Arraste a foto para enquadrar.
-              </p>
+              <>
+                <p className="mt-3 text-center text-sm text-brand-muted">
+                  Arraste a foto para enquadrar.
+                </p>
+                {/* Atalho no mobile: baixar logo abaixo da moldura, sem precisar
+                    rolar até o card de instruções. No desktop os botões do card
+                    já ficam visíveis ao lado, então este atalho some. */}
+                <div className="mt-6 flex flex-col gap-3 lg:hidden">
+                  <button
+                    type="button"
+                    onClick={baixar}
+                    className="inline-flex items-center justify-center rounded-full bg-brand-blue px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-dark"
+                  >
+                    Baixar imagem
+                  </button>
+                  {podeCompartilhar && (
+                    <button
+                      type="button"
+                      onClick={compartilhar}
+                      className="inline-flex items-center justify-center rounded-full border border-brand-blue/20 px-7 py-3.5 text-sm font-semibold text-brand-blue transition-colors hover:bg-brand-mist"
+                    >
+                      Compartilhar
+                    </button>
+                  )}
+                </div>
+              </>
             )}
           </div>
 
@@ -337,7 +431,7 @@ export function MolduraFoto() {
                 />
               </div>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <div className="mt-8 hidden flex-col gap-3 lg:flex sm:flex-row">
                 <button
                   type="button"
                   onClick={baixar}
