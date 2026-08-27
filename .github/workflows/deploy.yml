@@ -31,8 +31,7 @@ jobs:
       - name: Gerar o site estático
         run: npm run build
         env:
-          NEXT_PUBLIC_BASE_PATH: /ulissesdorodeio
-          NEXT_PUBLIC_SITE_URL: https://guipaglioni.github.io/ulissesdorodeio
+          NEXT_PUBLIC_SITE_URL: https://ulissesdorodeio.com.br
 
       - uses: actions/configure-pages@v5
 
