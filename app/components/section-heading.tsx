@@ -1,6 +1,8 @@
 type SectionHeadingProps = {
   chapeu?: string;
   titulo: string;
+  /** Linha de reforço entre o título e a descrição. */
+  chamada?: string;
   descricao?: string;
   tone?: "light" | "dark";
   align?: "left" | "center";
@@ -9,6 +11,7 @@ type SectionHeadingProps = {
 export function SectionHeading({
   chapeu,
   titulo,
+  chamada,
   descricao,
   tone = "dark",
   align = "left",
@@ -33,9 +36,18 @@ export function SectionHeading({
       >
         {titulo}
       </h2>
+      {chamada && (
+        <p
+          className={`mt-5 text-lg font-semibold leading-7 sm:text-xl ${
+            isLight ? "text-white" : "text-brand-blue"
+          }`}
+        >
+          {chamada}
+        </p>
+      )}
       {descricao && (
         <p
-          className={`mt-5 text-base leading-7 sm:text-lg sm:leading-8 ${
+          className={`${chamada ? "mt-3" : "mt-5"} text-base leading-7 sm:text-lg sm:leading-8 ${
             isLight ? "text-white/80" : "text-brand-muted"
           }`}
         >

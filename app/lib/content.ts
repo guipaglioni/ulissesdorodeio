@@ -211,22 +211,88 @@ export const porQue = {
 
 export const naMidia = {
   titulo: "Na mídia",
+  chamada: "Ulisses do Rodeio é notícia.",
   subtitulo:
-    "A repercussão da candidatura, do interior paulista aos veículos de alcance nacional.",
+    "Acompanhe reportagens, entrevistas e publicações sobre sua trajetória, sua candidatura e sua atuação pelo interior paulista.",
+  destaques: {
+    titulo: "Destaques da imprensa",
+    descricao:
+      "O que veículos de comunicação estão repercutindo sobre Ulisses e sua caminhada para representar o interior em Brasília.",
+  },
+  // Matérias publicadas de fato pelos veículos; imagens de capa baixadas das
+  // próprias reportagens (exceto O Globo, que não publica capa própria).
   itens: [
     {
       veiculo: "Marília Notícia",
       titulo:
         "Ulisses e Waldir Filé se unem para garantir o crescimento da região de Marília",
+      resumo:
+        "Parceria entre as duas candidaturas reforça o compromisso com o desenvolvimento da região.",
+      data: "2026-08-25",
+      dataLegivel: "25 ago 2026",
+      imagem: "/na-midia/marilia-waldir-file.jpg",
       url: "https://marilianoticia.com.br/ulisses-e-waldir-file-se-unem-para-garantir-o-crescimento-da-regiao-de-marilia/",
+    },
+    {
+      veiculo: "Marília Notícia",
+      titulo:
+        "Compromisso político de Ulisses fortalece o agro e defende as tradições do campo",
+      resumo:
+        "Candidato defende o fortalecimento do agronegócio e as tradições do campo no interior paulista.",
+      data: "2026-08-19",
+      dataLegivel: "19 ago 2026",
+      imagem: "/na-midia/marilia-compromisso-agro.jpg",
+      url: "https://marilianoticia.com.br/compromisso-politico-de-ulisses-fortalece-o-agro-e-defende-as-tradicoes-do-campo/",
+    },
+    {
+      veiculo: "Marília Notícia",
+      titulo:
+        "Ulisses do Rodeio projeta cultura do agronegócio regional em pauta nacional",
+      resumo:
+        "Empresário e organizador de eventos leva a cultura do agro regional ao debate nacional.",
+      data: "2026-08-13",
+      dataLegivel: "13 ago 2026",
+      imagem: "/na-midia/marilia-cultura-agronegocio.jpg",
+      url: "https://marilianoticia.com.br/ulisses-do-rodeio-projeta-cultura-do-agronegocio-regional-em-pauta-nacional/",
+    },
+    {
+      veiculo: "Marília Notícia",
+      titulo:
+        "Empresário Ulisses do Rodeio oficializa candidatura à Câmara dos Deputados",
+      resumo:
+        "Candidatura a deputado federal pelo Solidariedade representa o agro e o interior paulista.",
+      data: "2026-08-07",
+      dataLegivel: "7 ago 2026",
+      imagem: "/na-midia/marilia-oficializa-candidatura.jpg",
+      url: "https://marilianoticia.com.br/empresario-ulisses-do-rodeio-oficializa-candidatura-a-camara-dos-deputados/",
     },
     {
       veiculo: "O Globo",
       titulo:
         "Ulisses do Rodeio: a força do interior no cenário do agronegócio nacional",
+      resumo:
+        "Do rodeio ao agro: a trajetória que levou o interior ao debate nacional.",
+      data: "2026-07-21",
+      dataLegivel: "21 jul 2026",
+      imagem: "/trajetoria-brasilia.jpg",
       url: "https://oglobo.globo.com/patrocinado/pulse-brand/noticia/2026/07/21/ulisses-do-rodeio-a-forca-do-interior-no-cenario-do-agronegocio-nacional-1.ghtml",
     },
+    {
+      veiculo: "JP Jornal O Popular",
+      titulo:
+        "“Ubarana vai mostrar a força do interior”, destaca Ulisses do Rodeio sobre a grande festa de 2026",
+      resumo:
+        "Rodeio de Ubarana promete movimentar a economia com shows, montarias e tradição.",
+      data: "2026-07-10",
+      dataLegivel: "10 jul 2026",
+      imagem: "/na-midia/jp-popular-ubarana.jpg",
+      url: "https://jpopopular.com.br/2026/07/10/ubarana-vai-mostrar-a-forca-do-interior-destaca-ulisses-do-rodeio-sobre-a-grande-festa-de-2026/",
+    },
   ],
+  fecho: {
+    linha1: "O interior ganhou espaço na conversa.",
+    linha2: "Agora precisa ganhar voz em Brasília.",
+  },
 } as const;
 
 export const videos = {
