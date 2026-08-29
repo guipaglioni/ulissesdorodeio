@@ -307,6 +307,17 @@ export const naMidia = {
       imagem: "/na-midia/jp-popular-ubarana.jpg",
       url: "https://jpopopular.com.br/2026/07/10/ubarana-vai-mostrar-a-forca-do-interior-destaca-ulisses-do-rodeio-sobre-a-grande-festa-de-2026/",
     },
+    {
+      veiculo: "Hora da Fama",
+      titulo:
+        "Ulisses do Rodeio desperta atenção política e surge como aposta jovem do Solidariedade",
+      resumo:
+        "Nome ligado ao agro e aos rodeios desponta como aposta jovem do partido em São Paulo.",
+      data: "2026-05-21",
+      dataLegivel: "21 mai 2026",
+      imagem: "/na-midia/hora-da-fama-aposta-jovem.jpg",
+      url: "https://horadafama.com.br/ulisses-do-rodeio-desperta-atencao-politica-e-surge-como-aposta-jovem-do-solidariedade/",
+    },
   ],
   fecho: {
     linha1: "O interior ganhou espaço na conversa.",
