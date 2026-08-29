@@ -59,11 +59,30 @@ export const moldura = {
   descricao:
     "Escolha uma foto do seu celular ou computador, ajuste o enquadramento e baixe a imagem pronta para publicar nas suas redes. Tudo acontece no seu aparelho — a foto não é enviada para lugar nenhum.",
   passos: [
+    "Escolha a moldura",
     "Escolha uma foto",
     "Ajuste o zoom e arraste para enquadrar",
     "Baixe e publique marcando @ulissesdorodeio",
   ],
   arquivo: "ulisses-do-rodeio-7770.png",
+  /**
+   * `abertura` é o círculo que envolve o vazado de cada arte, medido em pixels
+   * sobre o arquivo de 1080x1080. A foto é escalada e posicionada por ele.
+   */
+  artes: [
+    {
+      id: "eu-apoio",
+      rotulo: "Ulisses do Rodeio",
+      arquivo: "moldura-eu-apoio-7770",
+      abertura: { cx: 525, cy: 504, raio: 468 },
+    },
+    {
+      id: "vote",
+      rotulo: "Ulisses do Rodeio e Waldir Filé",
+      arquivo: "moldura-vote-7770",
+      abertura: { cx: 578, cy: 464, raio: 392 },
+    },
+  ],
 } as const;
 
 export const quemE = {

@@ -17,13 +17,13 @@ import { moldura, redes } from "@/app/lib/content";
 const TAMANHO = 1080;
 /** Prefixo do site quando publicado em subpasta (GitHub Pages). */
 const BASE = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-const MOLDURA_SRC = `${BASE}/moldura-7770.webp`;
+
+type Arte = (typeof moldura.artes)[number];
+
+const arteSrc = (arte: Arte) => `${BASE}/${arte.arquivo}.webp`;
 /** Recorte da área vazada da arte: a foto só aparece dentro dela. */
-const MASCARA_SRC = `${BASE}/moldura-7770-mascara.png`;
-/** Laranja da campanha, usado onde a arte não cobre e a foto não entra. */
-const LARANJA = "#F36C21";
-/** Círculo interno da moldura, medido no arquivo da arte. */
-const ABERTURA = { cx: 548, cy: 498, raio: 431 };
+const mascaraSrc = (arte: Arte) => `${BASE}/${arte.arquivo}-mascara.png`;
+
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 3;
 /** Folga extra de arrasto, fração do lado da abertura, além da área coberta pela foto. */
@@ -48,10 +48,12 @@ export function MolduraFoto() {
   const toquesRef = useRef<Map<number, { x: number; y: number }>>(new Map());
   const pincaRef = useRef<{ distancia: number; centroX: number; centroY: number } | null>(null);
 
+  const [arteId, setArteId] = useState<Arte["id"]>(moldura.artes[0].id);
   const [temFoto, setTemFoto] = useState(false);
   const [zoom, setZoom] = useState(1.1);
   const [deslocamento, setDeslocamento] = useState<Deslocamento>({ x: 0, y: 0 });
-  const [molduraPronta, setMolduraPronta] = useState(false);
+  /** Id da arte cujos arquivos já estão nos refs — nulo enquanto carrega. */
+  const [arteCarregada, setArteCarregada] = useState<Arte["id"] | null>(null);
   const [erro, setErro] = useState<string | null>(null);
 
   // Compartilhamento nativo só existe no navegador: no servidor, sempre false.
@@ -64,44 +66,56 @@ export function MolduraFoto() {
   const idZoom = useId();
   const idArquivo = useId();
 
-  // Carrega arte e máscara uma única vez.
+  const arte = moldura.artes.find((item) => item.id === arteId) ?? moldura.artes[0];
+  const abertura = arte.abertura;
+
+  // Recarrega arte e máscara sempre que a moldura escolhida muda. Os refs só
+  // trocam quando os dois arquivos chegam, para o canvas nunca misturar artes.
   useEffect(() => {
+    let cancelado = false;
     let pendentes = 2;
+
     const concluir = () => {
       pendentes -= 1;
-      if (pendentes === 0) setMolduraPronta(true);
+      if (pendentes > 0 || cancelado) return;
+      molduraRef.current = desenho;
+      mascaraRef.current = mascara;
+      setArteCarregada(arte.id);
     };
-    const falhar = () => setErro("Não foi possível carregar a moldura.");
+    const falhar = () => {
+      if (!cancelado) setErro("Não foi possível carregar a moldura.");
+    };
 
-    const arte = new Image();
-    arte.src = MOLDURA_SRC;
-    arte.onload = () => {
-      molduraRef.current = arte;
-      concluir();
-    };
-    arte.onerror = falhar;
+    const desenho = new Image();
+    desenho.onload = concluir;
+    desenho.onerror = falhar;
+    desenho.src = arteSrc(arte);
 
     const mascara = new Image();
-    mascara.src = MASCARA_SRC;
-    mascara.onload = () => {
-      mascaraRef.current = mascara;
-      concluir();
-    };
+    mascara.onload = concluir;
     mascara.onerror = falhar;
-  }, []);
+    mascara.src = mascaraSrc(arte);
+
+    return () => {
+      cancelado = true;
+    };
+  }, [arte]);
 
   /** Quanto a foto pode deslizar sem deixar buraco na abertura, para um dado zoom. */
-  const limitesPara = useCallback((z: number) => {
-    const foto = fotoRef.current;
-    if (!foto) return { x: 0, y: 0 };
-    const lado = ABERTURA.raio * 2;
-    const escala = Math.max(lado / foto.width, lado / foto.height) * z;
-    const folga = lado * FOLGA_ARRASTO;
-    return {
-      x: Math.max(0, (foto.width * escala - lado) / 2) + folga,
-      y: Math.max(0, (foto.height * escala - lado) / 2) + folga,
-    };
-  }, []);
+  const limitesPara = useCallback(
+    (z: number) => {
+      const foto = fotoRef.current;
+      if (!foto) return { x: 0, y: 0 };
+      const lado = abertura.raio * 2;
+      const escala = Math.max(lado / foto.width, lado / foto.height) * z;
+      const folga = lado * FOLGA_ARRASTO;
+      return {
+        x: Math.max(0, (foto.width * escala - lado) / 2) + folga,
+        y: Math.max(0, (foto.height * escala - lado) / 2) + folga,
+      };
+    },
+    [abertura],
+  );
 
   const limites = useCallback(() => limitesPara(zoom), [limitesPara, zoom]);
 
@@ -110,15 +124,15 @@ export function MolduraFoto() {
     const contexto = canvas?.getContext("2d");
     if (!canvas || !contexto) return;
 
+    // Fundo transparente: fora da arte e fora do vazado nada é pintado, então
+    // o PNG final sai recortado.
     contexto.clearRect(0, 0, TAMANHO, TAMANHO);
-    contexto.fillStyle = LARANJA;
-    contexto.fillRect(0, 0, TAMANHO, TAMANHO);
 
     const foto = fotoRef.current;
     const mascara = mascaraRef.current;
     if (foto && mascara) {
       // A foto é montada à parte e recortada pela máscara da arte, para não
-      // vazar como quadrado por cima do laranja.
+      // vazar como quadrado por fora da moldura.
       const recorte = (recorteRef.current ??= document.createElement("canvas"));
       recorte.width = TAMANHO;
       recorte.height = TAMANHO;
@@ -127,14 +141,14 @@ export function MolduraFoto() {
         pincel.clearRect(0, 0, TAMANHO, TAMANHO);
         pincel.globalCompositeOperation = "source-over";
 
-        const lado = ABERTURA.raio * 2;
+        const lado = abertura.raio * 2;
         const escala = Math.max(lado / foto.width, lado / foto.height) * zoom;
         const largura = foto.width * escala;
         const altura = foto.height * escala;
         pincel.drawImage(
           foto,
-          ABERTURA.cx - largura / 2 + deslocamento.x,
-          ABERTURA.cy - altura / 2 + deslocamento.y,
+          abertura.cx - largura / 2 + deslocamento.x,
+          abertura.cy - altura / 2 + deslocamento.y,
           largura,
           altura,
         );
@@ -147,13 +161,13 @@ export function MolduraFoto() {
       }
     }
 
-    const arte = molduraRef.current;
-    if (arte) contexto.drawImage(arte, 0, 0, TAMANHO, TAMANHO);
-  }, [deslocamento, zoom]);
+    const desenho = molduraRef.current;
+    if (desenho) contexto.drawImage(desenho, 0, 0, TAMANHO, TAMANHO);
+  }, [abertura, deslocamento, zoom]);
 
   useEffect(() => {
-    desenhar();
-  }, [desenhar, molduraPronta]);
+    if (arteCarregada === arte.id) desenhar();
+  }, [arte.id, arteCarregada, desenhar]);
 
   function aoEscolherArquivo(evento: React.ChangeEvent<HTMLInputElement>) {
     const arquivo = evento.target.files?.[0];
@@ -273,6 +287,12 @@ export function MolduraFoto() {
     }
   }
 
+  /** Trocar de arte mantém a foto, mas o enquadramento recomeça do centro. */
+  function trocarArte(id: Arte["id"]) {
+    setArteId(id);
+    setDeslocamento({ x: 0, y: 0 });
+  }
+
   function aoMudarZoom(valor: number) {
     setZoom(valor);
     const maximo = limitesPara(valor);
@@ -343,7 +363,7 @@ export function MolduraFoto() {
               onPointerMove={aoMover}
               onPointerUp={aoSoltar}
               onPointerCancel={aoSoltar}
-              className={`w-full rounded-2xl bg-brand-orange shadow-xl ${
+              className={`w-full ${
                 temFoto ? "cursor-grab touch-none active:cursor-grabbing" : ""
               }`}
               aria-label="Pré-visualização da sua foto com a moldura da campanha"
@@ -396,6 +416,45 @@ export function MolduraFoto() {
             </ol>
 
             <div className="mt-10 rounded-2xl bg-white p-6 sm:p-8">
+              <fieldset className="mb-8">
+                <legend className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-muted">
+                  Moldura
+                </legend>
+                <div className="mt-3 flex gap-4">
+                  {moldura.artes.map((item) => {
+                    const ativa = item.id === arteId;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => trocarArte(item.id)}
+                        aria-pressed={ativa}
+                        className={`flex flex-1 flex-col items-center gap-2 rounded-2xl border-2 p-3 transition-colors ${
+                          ativa
+                            ? "border-brand-orange bg-brand-mist"
+                            : "border-black/10 hover:border-brand-blue/40"
+                        }`}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={arteSrc(item)}
+                          alt=""
+                          className="w-full max-w-28"
+                          loading="lazy"
+                        />
+                        <span
+                          className={`text-balance text-center text-sm font-semibold leading-snug ${
+                            ativa ? "text-brand-orange" : "text-brand-blue"
+                          }`}
+                        >
+                          {item.rotulo}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
+
               <label
                 htmlFor={idArquivo}
                 className="inline-flex cursor-pointer items-center justify-center rounded-full bg-brand-orange px-8 py-4 text-sm font-semibold text-white transition-colors hover:bg-[#d95c14]"
