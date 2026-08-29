@@ -240,6 +240,7 @@ export const naMidia = {
   },
   // Matérias publicadas de fato pelos veículos; imagens de capa baixadas das
   // próprias reportagens (exceto O Globo, que não publica capa própria).
+  // `destaque` sobe a matéria para o topo da grade, ocupando as duas colunas.
   itens: [
     {
       veiculo: "Marília Notícia",
@@ -295,6 +296,7 @@ export const naMidia = {
       dataLegivel: "21 jul 2026",
       imagem: "/trajetoria-brasilia.jpg",
       url: "https://oglobo.globo.com/patrocinado/pulse-brand/noticia/2026/07/21/ulisses-do-rodeio-a-forca-do-interior-no-cenario-do-agronegocio-nacional-1.ghtml",
+      destaque: true,
     },
     {
       veiculo: "JP Jornal O Popular",
@@ -317,6 +319,7 @@ export const naMidia = {
       dataLegivel: "21 mai 2026",
       imagem: "/na-midia/hora-da-fama-aposta-jovem.jpg",
       url: "https://horadafama.com.br/ulisses-do-rodeio-desperta-atencao-politica-e-surge-como-aposta-jovem-do-solidariedade/",
+      destaque: true,
     },
   ],
   fecho: {

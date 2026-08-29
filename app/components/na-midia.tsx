@@ -60,7 +60,100 @@ function IconeSetaExterna({ className = "h-3.5 w-3.5" }: IconeProps) {
   );
 }
 
+type Materia = (typeof naMidia.itens)[number];
+
+/** Matérias de veículos grandes abrem a grade ocupando as duas colunas. */
+function ehDestaque(item: Materia) {
+  return "destaque" in item && item.destaque;
+}
+
+function Cartao({ item }: { item: Materia }) {
+  const destaque = ehDestaque(item);
+
+  return (
+    <li className={destaque ? "lg:col-span-2" : undefined}>
+      <a
+        href={item.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`group flex h-full flex-col gap-5 rounded-2xl border p-5 transition-colors sm:flex-row sm:items-stretch sm:gap-6 ${
+          destaque
+            ? "border-brand-orange/30 bg-brand-peach hover:border-brand-orange/60"
+            : "border-black/5 bg-brand-mist hover:border-brand-orange/30 hover:bg-brand-peach"
+        }`}
+      >
+        {/* No celular a capa ocupa a largura do card. As matérias chegam em
+            proporções muito diferentes (há capas em retrato), então a caixa é
+            4:3 e o recorte parte do topo, onde costuma estar o rosto. */}
+        <div
+          className={`relative aspect-[4/3] w-full shrink-0 overflow-hidden rounded-xl ${
+            destaque ? "sm:w-72" : "sm:aspect-square sm:w-40"
+          }`}
+        >
+          <Image
+            src={item.imagem}
+            alt={`Imagem da matéria: ${item.titulo}`}
+            fill
+            sizes={
+              destaque
+                ? "(max-width: 640px) 90vw, 288px"
+                : "(max-width: 640px) 90vw, 160px"
+            }
+            className="object-cover object-top transition-transform group-hover:scale-105"
+          />
+        </div>
+
+        <div className="flex flex-1 flex-col">
+          <span className="flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-semibold uppercase tracking-[0.18em] text-brand-orange">
+            {item.veiculo}
+            {destaque && (
+              <span className="rounded-full bg-brand-orange px-2.5 py-1 text-[0.65rem] tracking-[0.14em] text-white">
+                Destaque
+              </span>
+            )}
+          </span>
+          <span
+            className={`mt-2 block font-serif font-bold text-brand-blue ${
+              destaque
+                ? "text-lg leading-7 sm:text-2xl sm:leading-9"
+                : "text-base leading-6 sm:text-lg sm:leading-7"
+            }`}
+          >
+            {item.titulo}
+          </span>
+          <span
+            className={`mt-3 block leading-6 text-brand-muted ${
+              destaque ? "text-sm sm:text-base sm:leading-7" : "text-sm"
+            }`}
+          >
+            {item.resumo}
+          </span>
+
+          <span className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-black/5 pt-4 sm:mt-auto">
+            <time
+              dateTime={item.data}
+              className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-brand-muted"
+            >
+              <IconeCalendario />
+              {item.dataLegivel}
+            </time>
+            <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-blue transition-colors group-hover:text-brand-orange">
+              Ler matéria
+              <IconeSetaExterna className="h-3.5 w-3.5 text-brand-orange" />
+            </span>
+          </span>
+        </div>
+      </a>
+    </li>
+  );
+}
+
 export function NaMidia() {
+  const itens = [
+    ...naMidia.itens.filter(ehDestaque),
+    ...naMidia.itens.filter((item) => !ehDestaque(item)),
+  ];
+
   return (
     <section id="na-midia" className="bg-white py-24 sm:py-28">
       <div className="mx-auto w-full max-w-6xl px-6">
@@ -82,51 +175,8 @@ export function NaMidia() {
         </div>
 
         <ul className="mt-10 grid gap-6 lg:grid-cols-2">
-          {naMidia.itens.map((item) => (
-            <li key={item.url}>
-              <a
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex h-full flex-col gap-5 rounded-2xl border border-black/5 bg-brand-mist p-5 transition-colors hover:border-brand-orange/30 hover:bg-brand-peach sm:flex-row sm:items-stretch sm:gap-6"
-              >
-                <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-xl sm:aspect-square sm:w-40">
-                  <Image
-                    src={item.imagem}
-                    alt={`Imagem da matéria: ${item.titulo}`}
-                    fill
-                    sizes="(max-width: 640px) 90vw, 160px"
-                    className="object-cover transition-transform group-hover:scale-105"
-                  />
-                </div>
-
-                <div className="flex flex-1 flex-col">
-                  <span className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-orange">
-                    {item.veiculo}
-                  </span>
-                  <span className="mt-2 block font-serif text-base font-bold leading-6 text-brand-blue sm:text-lg sm:leading-7">
-                    {item.titulo}
-                  </span>
-                  <span className="mt-3 block text-sm leading-6 text-brand-muted">
-                    {item.resumo}
-                  </span>
-
-                  <span className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-black/5 pt-4 sm:mt-auto">
-                    <time
-                      dateTime={item.data}
-                      className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-brand-muted"
-                    >
-                      <IconeCalendario />
-                      {item.dataLegivel}
-                    </time>
-                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-blue transition-colors group-hover:text-brand-orange">
-                      Ler matéria
-                      <IconeSetaExterna className="h-3.5 w-3.5 text-brand-orange" />
-                    </span>
-                  </span>
-                </div>
-              </a>
-            </li>
+          {itens.map((item) => (
+            <Cartao key={item.url} item={item} />
           ))}
         </ul>
 
