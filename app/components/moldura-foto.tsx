@@ -353,7 +353,7 @@ export function MolduraFoto() {
           align="center"
         />
 
-        <div className="mt-16 grid gap-12 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
+        <div className="mt-16 grid gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center lg:gap-12">
           <div className="mx-auto w-full max-w-md">
             <canvas
               ref={canvasRef}
@@ -369,37 +369,17 @@ export function MolduraFoto() {
               aria-label="Pré-visualização da sua foto com a moldura da campanha"
             />
             {temFoto && (
-              <>
-                <p className="mt-3 text-center text-sm text-brand-muted">
-                  Arraste a foto para enquadrar.
-                </p>
-                {/* Atalho no mobile: baixar logo abaixo da moldura, sem precisar
-                    rolar até o card de instruções. No desktop os botões do card
-                    já ficam visíveis ao lado, então este atalho some. */}
-                <div className="mt-6 flex flex-col gap-3 lg:hidden">
-                  <button
-                    type="button"
-                    onClick={baixar}
-                    className="inline-flex items-center justify-center rounded-full bg-brand-blue px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-brand-blue-dark"
-                  >
-                    Baixar imagem
-                  </button>
-                  {podeCompartilhar && (
-                    <button
-                      type="button"
-                      onClick={compartilhar}
-                      className="inline-flex items-center justify-center rounded-full border border-brand-blue/20 px-7 py-3.5 text-sm font-semibold text-brand-blue transition-colors hover:bg-brand-mist"
-                    >
-                      Compartilhar
-                    </button>
-                  )}
-                </div>
-              </>
+              <p className="mt-3 text-center text-sm text-brand-muted">
+                Arraste a foto para enquadrar.
+              </p>
             )}
           </div>
 
-          <div>
-            <ol className="space-y-4">
+          {/* No celular os controles sobem para logo abaixo da moldura, e os
+              passos descem — assim ninguém precisa rolar para escolher a foto.
+              No desktop a ordem natural volta, com os passos acima do card. */}
+          <div className="flex flex-col">
+            <ol className="order-2 mt-10 space-y-4 lg:order-none lg:mt-0">
               {moldura.passos.map((passo, indice) => (
                 <li key={passo} className="flex items-start gap-4">
                   <span
@@ -415,12 +395,12 @@ export function MolduraFoto() {
               ))}
             </ol>
 
-            <div className="mt-10 rounded-2xl bg-white p-6 sm:p-8">
-              <fieldset className="mb-8">
+            <div className="order-1 rounded-2xl bg-white p-5 sm:p-8 lg:order-none lg:mt-10">
+              <fieldset className="mb-6 sm:mb-8">
                 <legend className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-muted">
                   Moldura
                 </legend>
-                <div className="mt-3 flex gap-4">
+                <div className="mt-3 flex gap-3 sm:gap-4">
                   {moldura.artes.map((item) => {
                     const ativa = item.id === arteId;
                     return (
@@ -429,7 +409,7 @@ export function MolduraFoto() {
                         type="button"
                         onClick={() => trocarArte(item.id)}
                         aria-pressed={ativa}
-                        className={`flex flex-1 flex-col items-center gap-2 rounded-2xl border-2 p-3 transition-colors ${
+                        className={`flex flex-1 flex-col items-center gap-2 rounded-2xl border-2 p-2.5 transition-colors sm:p-3 ${
                           ativa
                             ? "border-brand-orange bg-brand-mist"
                             : "border-black/10 hover:border-brand-blue/40"
@@ -439,7 +419,7 @@ export function MolduraFoto() {
                         <img
                           src={arteSrc(item)}
                           alt=""
-                          className="w-full max-w-28"
+                          className="w-full max-w-24 sm:max-w-28"
                           loading="lazy"
                         />
                         <span
@@ -490,7 +470,7 @@ export function MolduraFoto() {
                 />
               </div>
 
-              <div className="mt-8 hidden flex-col gap-3 lg:flex sm:flex-row">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <button
                   type="button"
                   onClick={baixar}
