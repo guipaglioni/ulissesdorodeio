@@ -299,17 +299,6 @@ export const naMidia = {
       destaque: true,
     },
     {
-      veiculo: "JP Jornal O Popular",
-      titulo:
-        "“Ubarana vai mostrar a força do interior”, destaca Ulisses do Rodeio sobre a grande festa de 2026",
-      resumo:
-        "Rodeio de Ubarana promete movimentar a economia com shows, montarias e tradição.",
-      data: "2026-07-10",
-      dataLegivel: "10 jul 2026",
-      imagem: "/na-midia/jp-popular-ubarana.jpg",
-      url: "https://jpopopular.com.br/2026/07/10/ubarana-vai-mostrar-a-forca-do-interior-destaca-ulisses-do-rodeio-sobre-a-grande-festa-de-2026/",
-    },
-    {
       veiculo: "Hora da Fama",
       titulo:
         "Ulisses do Rodeio desperta atenção política e surge como aposta jovem do Solidariedade",
