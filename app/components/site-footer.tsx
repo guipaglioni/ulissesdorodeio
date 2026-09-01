@@ -4,6 +4,7 @@ import {
   acaoPrincipal,
   candidato,
   fontes,
+  jingle,
   navegacao,
   redes,
 } from "@/app/lib/content";
@@ -44,7 +45,7 @@ export function SiteFooter() {
               Navegação
             </h2>
             <ul className="mt-5 space-y-3">
-              {[acaoPrincipal, ...navegacao].map((item) => (
+              {[acaoPrincipal, ...navegacao, jingle.nav].map((item) => (
                 <li key={item.href}>
                   <a
                     href={item.href}

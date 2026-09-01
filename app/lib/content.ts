@@ -387,3 +387,22 @@ export const fontes = [
     url: "https://globorural.globo.com/conteudo-de-marca/pulse-brand/noticia/2026/07/ulisses-do-rodeio-a-voz-autentica-que-o-agronegocio-busca-em-meio-a-lacuna-de-representatividade-1.ghtml",
   },
 ] as const;
+
+export const jingle = {
+  chapeu: "Trilha da campanha",
+  titulo: "O jingle do Ulisses do Rodeio",
+  chamada: "A música que já está tocando pelo interior paulista.",
+  descricao:
+    "Ouça aqui, baixe o arquivo e leve o jingle para os seus stories, para o status do WhatsApp e para os carros de som da campanha.",
+  /** Arquivo em public/. O tocador e o download usam este mesmo MP3. */
+  arquivo: "jingle-ulisses-do-rodeio.mp3",
+  /** Nome sugerido ao visitante no download. */
+  nomeDownload: "Jingle - Ulisses do Rodeio 7770.mp3",
+  botaoTocar: "Ouvir o jingle",
+  botaoParar: "Parar o jingle",
+  botaoBaixar: "Baixar o jingle (MP3)",
+  aviso:
+    "O jingle toca sozinho na primeira visita. O botão de som no topo do site liga e desliga a música a qualquer momento.",
+  /** Entrada de menu usada no menu mobile e no rodapé. */
+  nav: { href: "#jingle", rotulo: "Jingle" },
+} as const;

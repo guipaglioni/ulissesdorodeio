@@ -3,7 +3,8 @@
 import { useState } from "react";
 import { BrandMark } from "@/app/components/brand-mark";
 import { iconesRedes } from "@/app/components/icones-redes";
-import { acaoPrincipal, navegacao, redes } from "@/app/lib/content";
+import { BotaoJingle } from "@/app/components/jingle-player";
+import { acaoPrincipal, jingle, navegacao, redes } from "@/app/lib/content";
 
 export function SiteHeader() {
   const [aberto, setAberto] = useState(false);
@@ -27,44 +28,48 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
-          {redes.map((rede) => {
-            const Icone = iconesRedes[rede.nome];
-            return (
-              <a
-                key={rede.url}
-                href={rede.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${rede.nome} — ${rede.usuario}`}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-brand-blue/15 text-brand-blue transition-colors hover:border-brand-orange hover:text-brand-orange"
-              >
-                <Icone />
-              </a>
-            );
-          })}
-          <a
-            href={acaoPrincipal.href}
-            className="rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#d95c14]"
-          >
-            {acaoPrincipal.rotulo}
-          </a>
-        </div>
+        <div className="flex items-center gap-3">
+          <BotaoJingle />
 
-        <button
-          type="button"
-          onClick={() => setAberto((v) => !v)}
-          className="flex h-11 w-11 items-center justify-center rounded-md border border-black/10 text-brand-blue lg:hidden"
-          aria-expanded={aberto}
-          aria-controls="menu-mobile"
-          aria-label={aberto ? "Fechar menu" : "Abrir menu"}
-        >
-          <span className="flex flex-col gap-1.5" aria-hidden>
-            <span className="block h-0.5 w-5 bg-current" />
-            <span className="block h-0.5 w-5 bg-current" />
-            <span className="block h-0.5 w-5 bg-current" />
-          </span>
-        </button>
+          <div className="hidden items-center gap-3 lg:flex">
+            {redes.map((rede) => {
+              const Icone = iconesRedes[rede.nome];
+              return (
+                <a
+                  key={rede.url}
+                  href={rede.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${rede.nome} — ${rede.usuario}`}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-brand-blue/15 text-brand-blue transition-colors hover:border-brand-orange hover:text-brand-orange"
+                >
+                  <Icone />
+                </a>
+              );
+            })}
+            <a
+              href={acaoPrincipal.href}
+              className="rounded-full bg-brand-orange px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#d95c14]"
+            >
+              {acaoPrincipal.rotulo}
+            </a>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setAberto((v) => !v)}
+            className="flex h-11 w-11 items-center justify-center rounded-md border border-black/10 text-brand-blue lg:hidden"
+            aria-expanded={aberto}
+            aria-controls="menu-mobile"
+            aria-label={aberto ? "Fechar menu" : "Abrir menu"}
+          >
+            <span className="flex flex-col gap-1.5" aria-hidden>
+              <span className="block h-0.5 w-5 bg-current" />
+              <span className="block h-0.5 w-5 bg-current" />
+              <span className="block h-0.5 w-5 bg-current" />
+            </span>
+          </button>
+        </div>
       </div>
 
       {aberto && (
@@ -73,7 +78,7 @@ export function SiteHeader() {
           className="border-t border-black/5 bg-white px-6 pb-6 pt-2 lg:hidden"
           aria-label="Seções do site"
         >
-          {navegacao.map((item) => (
+          {[...navegacao, jingle.nav].map((item) => (
             <a
               key={item.href}
               href={item.href}

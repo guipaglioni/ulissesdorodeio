@@ -1,6 +1,8 @@
 import { Bandeiras } from "@/app/components/bandeiras";
 import { ChamadaFinal } from "@/app/components/chamada-final";
 import { Hero } from "@/app/components/hero";
+import { JingleProvider } from "@/app/components/jingle-player";
+import { JingleSecao } from "@/app/components/jingle-secao";
 import { MolduraFoto } from "@/app/components/moldura-foto";
 import { NaMidia } from "@/app/components/na-midia";
 import { Parceria } from "@/app/components/parceria";
@@ -13,7 +15,7 @@ import { Videos } from "@/app/components/videos";
 
 export default function Home() {
   return (
-    <>
+    <JingleProvider>
       <SiteHeader />
       <main className="flex-1">
         <Hero />
@@ -24,10 +26,11 @@ export default function Home() {
         <Parceria />
         <NaMidia />
         <Videos />
+        <JingleSecao />
         <PorQue />
         <ChamadaFinal />
       </main>
       <SiteFooter />
-    </>
+    </JingleProvider>
   );
 }
